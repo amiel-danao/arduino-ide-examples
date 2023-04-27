@@ -6,6 +6,11 @@
  * ------------------------------------------------------------------------*/
 
 #include<SoftwareSerial.h>
+//---------------------------------------------------------------------------------------------
+#define RESET_PIN 4
+unsigned long previousMillis = 0;
+String number = "+639954261220";
+//---------------------------------------------------------------------------------------------
 
 SoftwareSerial sim800l(2, 3);
 //---------------------------------------------------------------------------------------------
@@ -50,10 +55,7 @@ boolean tryATcommand(String cmd, String expected_answer, int timeout, int total_
   }
   //*************************************************************
 }
-//---------------------------------------------------------------------------------------------
-#define RESET_PIN 4
-unsigned long previousMillis = 0;
-//---------------------------------------------------------------------------------------------
+
 
 void setup() {
   pinMode(RESET_PIN, OUTPUT);
@@ -65,7 +67,10 @@ void setup() {
   tryATcommand("ATE","OK",1000,20);
   tryATcommand("AT","OK",1000,20);
   tryATcommand("AT+CMGF=1","OK",1000,20);
-  tryATcommand("AT+CNMI=1,2,0,0,0","OK",1000,20);
+  tryATcommand("AT+CSCS=\"GSM\"","OK",1000,20);  
+  tryATcommand("AT+CMGS=\"" + number + "\"\r","OK",1000,20);
+  sim800l.print("This is a sample sms");
+  // tryATcommand("AT+CNMI=1,2,0,0,0","OK",1000,20);
 }
 
 void loop() {
